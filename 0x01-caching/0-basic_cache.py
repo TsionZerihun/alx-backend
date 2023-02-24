@@ -15,7 +15,7 @@ class BasicCache(BaseCaching):
         super().__init__()
 
     def put(self, key, item):
-        """ 
+        """
         add key value pair in to the dict cache_data
         """
         if (key is None) or (item is None):
