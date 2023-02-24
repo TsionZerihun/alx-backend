@@ -7,13 +7,17 @@ from base_caching import BaseCaching
 
 
 class FIFOCache(BaseCaching):
-    """caching using FIFO algorithm"""
-
+    """ caching using FIFO algorithm
+    """
     def __init__(self):
-        """Initialization"""
+        """ Initialization
+        """
         super().__init__()
 
     def put(self, key, item):
+        """
+        add key value pair in to the dict cache_data
+        """
         if (key is None) or (item is None):
             pass
         elif len(self.cache_data) < BaseCaching.MAX_ITEMS:
