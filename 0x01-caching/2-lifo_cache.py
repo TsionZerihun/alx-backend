@@ -22,7 +22,6 @@ class LIFOCache(BaseCaching):
             if key not in self.cache_data:
                 if len(self.cache_data) == BaseCaching.MAX_ITEMS:
                     print("DISCARD: {}".format(self.cache_data.popitem()[0]))
-                    #self.cache_data.popitem()[0]
             else:
                 del self.cache_data[key]
             self.cache_data[key] = item
