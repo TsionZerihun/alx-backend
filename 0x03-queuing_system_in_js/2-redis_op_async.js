@@ -1,28 +1,24 @@
-import { print } from 'redis';
-import { createClient } from 'redis';
-import { promisify } from 'util';
+import redis from 'redis';
+import util from 'util';
 
-const client = createClient();
-client.get = promisify(client.get)
+const client = redis.createClient();
 
-client.on('error', err => console.log('Redis client not connected to the server:', err.toString()));
+client.on('error', (err) => console.log(`Redis client not connected to the server: ${err}`));
 
-const setNewSchool = (schoolName, value) => {
-  client.SET(schoolName, value, print)
-};
+client.on('connect', () => {
+    console.log('Redis client connected to the server');
+}).on('error', (err) => {
+    console.log(`Redis client not connected to the server: ${err}`);
+});
 
-const displaySchoolValue = async (schoolName) => {
-  const reply = await client.get(schoolName);
-  console.log(reply)
-};
-
-async function main() {
-  await displaySchoolValue('Holberton');
-  setNewSchool('HolbertonSanFrancisco', '100');
-  await displaySchoolValue('HolbertonSanFrancisco');
+function setNewSchool(schoolName, value) {
+    client.set(schoolName, value, redis.print());
 }
 
-client.on('connect', async () => {
-  console.log('Redis client connected to the server');
-  await main();
-});
+let displaySchoolValue = async schoolName => {
+    const getAsync = util.promisify(client.get).bind(client);
+    console.log(await getAsync(schoolName));
+};
+displaySchoolValue('Holberton');
+setNewSchool('HolbertonSanFrancisco', '100');
+displaySchoolValue('HolbertonSanFrancisco');
